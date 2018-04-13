@@ -83,9 +83,9 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
 $db['default'] = array(
     'dsn' => '',
     'hostname' => 'localhost',
-    'username' => 'allstude_codeign',
-    'password' => 'Mota123!!!987',
-    'database' => 'allstude_codeigniter',
+    'username' => 'root',
+    'password' => '',
+    'database' => 'doctor',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,

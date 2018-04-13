@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   | a PHP script and you can easily do that on your own.
   |
  */
-$config['base_url'] = 'https://allstudentdoctors.com';
+$config['base_url'] = '';
 $config['appID']	= '149973202268890';
 $config['appSecret']	= '48ecd22bb2c0b9507afb22a6a96462ea';
 /*

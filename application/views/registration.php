@@ -93,9 +93,35 @@
                                             <input   required type="password" name="conf" class="form-control" placeholder="Confirm Password" autofocus="">
                                         </div>
 
-                                        <div class="form-group mb-10">
-                                        <div required="" class="g-recaptcha" data-sitekey="6LciozgUAAAAABs4Yxkpqgqq7JGayumkDLG10LBV" autofocus=""></div>
+                                         <div  class="form-group">
+                                            <select required="required" id="country" name="country"  class="form-control">
+                                              <option data-name="" value=""><?php echo 'Select  Your Country';?></option>
+                                            <?php foreach (get_all_locations_by_type('country')->result() as $row) {
+                                                $sel = ($row->id==set_value('country'))?'selected="selected"':'';
+                                                ?>
+                                                <option data-name="<?php echo $row->name;?>" value="<?php echo $row->id;?>" <?php echo $sel;?>><?php echo $row->name;?></option>
+                                            <?php }?>
+
+                                            </select>
                                         </div>
+
+                                        <div class="form-group">
+                                                <select name="state" id="state" class="form-control">
+                                                    
+                                                </select>
+                                        </div>
+
+                                        <div class="form-group mb-10">
+
+                                            <input  required type="text" name="zipcode" class="form-control" placeholder="Zip Code" autofocus="">
+                                        </div>
+                               </div>
+
+
+
+                                        <!-- <div class="form-group mb-10">
+                                        <div required="" class="g-recaptcha" data-sitekey="6LciozgUAAAAABs4Yxkpqgqq7JGayumkDLG10LBV" autofocus=""></div>
+                                        </div> -->
 
 
                                         <div class="form-group mb-10">
@@ -140,7 +166,44 @@
     </section>
 
 </main>
+
+<script src="<?php echo base_url(); ?>script-assets/js/jQuery-2.1.4.min.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    
+
+     $('#country').on('change',function(){
+        // jQuery('#city').val('');
+        // jQuery('#selected_city').val('');
+        var val = $(this).val();
+       
+        
+        var loadUrl = '<?php echo base_url() ?>'+'/home/get_state_by_country_ajax/'+val;
+
+        jQuery.post(
+            loadUrl,
+            {},
+            function(responseText){
+                jQuery('#state').html(responseText);
+                var sel_country = '<?php echo (set_value("country")!='')?set_value("country"):'';?>';
+                var sel_state   = '<?php echo (set_value("state")!='')?set_value("state"):'';?>';
+                if(val==sel_country)
+                    jQuery('#state').val(sel_state);
+                else
+                jQuery('#state').val('');
+                jQuery('#state').focus();
+                jQuery('#state').trigger('change');
+
+            }
+        );
+     }).change();
+});
+
+</script>
+
 
 
 

@@ -53,6 +53,14 @@ class Global_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    public function insert_user_with_location($table, $data, $location){
+        $this->db->insert($table, $data);
+        $location['userid']=$this->db->insert_id();
+        $this->db->insert('user_zipcode', $location);
+        return $this->db->insert_id();
+    
+    }
+
     /**
      * @param $table
      * @param $where
@@ -836,6 +844,13 @@ class Global_model extends CI_Model {
         } else {
             return false;
         }
+    }
+
+    function get_all_locations_by_parent($parent='')
+    {
+        $this->db->order_by('name','asc');
+        $query = $this->db->get_where('locations',array('parent'=>$parent,'status'=>1));        
+        return $query;
     }
 
 

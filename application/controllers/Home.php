@@ -162,15 +162,21 @@ class Home extends CI_Controller {
         $data['tabActive'] = 'registration';
         $data['error'] = '';
 
-        if ($this->input->post()) {
+        // print '<pre>';
+        // print_r($this->input->post());
+        // print '</pre>';
 
+        if ($this->input->post()) {
             $this->form_validation->set_rules('profession', 'profession', 'trim|required');
             $this->form_validation->set_rules('user_name', 'user name', 'trim');
             $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[128]|is_unique[users.email]');
             $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
             $this->form_validation->set_rules('conf', 'Confirm Password', 'trim|required|matches[password]');
-            $this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_validate_captcha');
-            $this->form_validation->set_message('validate_captcha', 'Please check the the captcha form');
+            // $this->form_validation->set_rules('g-recaptcha-response', 'recaptcha validation', 'required|callback_validate_captcha');
+            //$this->form_validation->set_message('validate_captcha', 'Please check the the captcha form');
+            $this->form_validation->set_rules('country', 'country', 'trim|required');
+            $this->form_validation->set_rules('state', 'state', 'trim|required');
+            $this->form_validation->set_rules('zipcode', 'zipcode', 'trim|required');
 
 
             if ($this->form_validation->run() == true) {
@@ -186,9 +192,13 @@ class Home extends CI_Controller {
                 $save['confirmed'] 	= 0;
                 $save['status']		= 1;
 
+                $location['country'] = $this->input->post('country');
+                $location['state'] = $this->input->post('state');
+                $location['zipcode'] = $this->input->post('zipcode');
 
 
-                if ($this->global_model->insert('users', $save)) {
+
+                if ($retid = $this->global_model->insert_user_with_location('users', $save,$location)) {
 
                     $this->register_email_send($save);
                     $this->session->set_flashdata('msg', '<div class="alert alert-block alert-success fade in">
@@ -696,6 +706,26 @@ class Home extends CI_Controller {
             return TRUE;
         }
     }
+
+    public function get_state_by_country_ajax($parent='')
+    {
+        if($parent=='')
+        {
+            echo '<option value="">'.'Select Your State'.'</option>';
+        }
+        else
+        {
+            $query = $this->global_model->get_all_locations_by_parent($parent);
+            echo '<option value="">'.'Select Your State'.'</option>';
+            foreach ($query->result() as $row) 
+            {
+                echo '<option data-name="'.$row->name.'" value="'.$row->id.'">'.$row->name.'</option>';
+            }           
+        }
+
+        die;
+    }
+
 
 
 
