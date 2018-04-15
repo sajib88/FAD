@@ -112,9 +112,36 @@
                                         </div>
 
                                         <div class="form-group mb-10">
-
-                                            <input  required type="text" name="zipcode" class="form-control" placeholder="Zip Code" autofocus="">
+                                            <?php $v = (set_value('zipcode')!='')?set_value('zipcode'):'';?>
+                                            <input  required type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Zip Code" value="<?php echo $v;?>">
                                         </div>
+
+                                        <div class="form-group mb-10">
+
+                                            <?php $v = (set_value('address')!='')?set_value('address'):'';?>
+                                            <input id="address" type="text" name="address" placeholder="<?php echo 'address';?>" value="<?php echo $v;?>" class="form-control">
+                                            <?php echo form_error('address');?>
+                                        </div>
+
+                                        <div class="form-group mb-10">
+                                        <a href="javascript:void(0)" class="btn btn-danger" onclick="codeAddress()"><i class="fa fa-map-marker"></i> <?php echo 'view on map';?></a>
+                                        </div>
+
+                                        <div class="form-group mb-10">
+                                            <div id="form-map"></div>
+                                        </div>
+
+                                        <div class="form-group mb-10">
+                                            <?php $v = (set_value('latitude')!='')?set_value('latitude'):'';?>
+                                            <input id="latitude" type="text" name="latitude" placeholder="<?php echo 'latitude';?>" value="<?php echo $v;?>" class="form-control">
+                                        </div>
+
+                                        <div class="form-group mb-10">
+                                             <?php $v = (set_value('longitude')!='')?set_value('longitude'):'';?>
+                                                <input id="longitude" type="text" name="longitude" placeholder="<?php 'longitude';?>" value="<?php echo $v;?>" class="form-control">
+                                        </div>
+
+
                                </div>
 
 
@@ -167,8 +194,26 @@
 
 </main>
 
+<link href="<?php echo base_url(); ?>script-assets/js/jquery-ui.css" rel="stylesheet">
+<script src="<?php echo base_url(); ?>script-assets/js/jquery-ui.js"></script>
+<style>
+    #form-map{
+        background-color: #e5e3df;
+        height: 300px;
+        width: 100%;
+    }
+    #form-map img { max-width: none; }
+</style>
+
 <script src="<?php echo base_url(); ?>script-assets/js/jQuery-2.1.4.min.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/markercluster.min.js"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/map-icons.min.js"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/map_config.js"></script>
+
+<script src="<?php echo base_url(); ?>script-assets/js/jquery.form.js"></script>
 
 
 <script type="text/javascript">
@@ -202,6 +247,118 @@ $(document).ready(function(){
      }).change();
 });
 
+</script>
+
+<script type="text/javascript">
+    var markers = [];
+    //    var map;
+    var Ireland = "Dhaka, Bangladesh";
+    function initialize() {
+        
+        geocoder = new google.maps.Geocoder();
+        var mapOptions = {
+            center: new google.maps.LatLng(-34.397, 150.644),
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: MAP_STYLE
+        };
+        map = new google.maps.Map(document.getElementById("form-map"),
+            mapOptions);
+//        codeAddress();//call the function
+        var ex_latitude = $('#latitude').val();
+        var ex_longitude = $('#longitude').val();
+
+        if (ex_latitude != '' && ex_longitude != ''){
+            map.setCenter(new google.maps.LatLng(ex_latitude, ex_longitude));//center the map over the result
+            var marker = new google.maps.Marker(
+                {
+                    map: map,
+                    draggable:true,
+                    animation: google.maps.Animation.DROP,
+                    position: new google.maps.LatLng(ex_latitude, ex_longitude)
+                });
+
+            markers.push(marker);
+            google.maps.event.addListener(marker, 'dragend', function()
+            {
+                var marker_positions = marker.getPosition();
+                $('#latitude').val(marker_positions.lat());
+                $('#longitude').val(marker_positions.lng());
+//                        console.log(marker.getPosition());
+            });
+
+        }
+
+    }
+
+    function codeAddress()
+    {
+        
+        var main_address = $('#address').val();
+        var country = $('#country').find(':selected').data('name');
+        var state = $('#state').find(':selected').data('name');
+
+        var zipcode = $('#zipcode').val();
+      
+
+        var address = [state, country,zipcode].join();
+
+        console.log(address);
+
+        if(country != '' && state != '')
+        {
+
+
+            setAllMap(null); //Clears the existing marker
+
+            geocoder.geocode( {address:address}, function(results, status)
+            {
+                if (status == google.maps.GeocoderStatus.OK)
+                {
+//                    console.log(results[0].geometry.location.lat());
+                    $('#latitude').val(results[0].geometry.location.lat());
+                    $('#longitude').val(results[0].geometry.location.lng());
+                    map.setCenter(results[0].geometry.location);//center the map over the result
+
+
+                    //place a marker at the location
+                    var marker = new google.maps.Marker(
+                        {
+                            map: map,
+                            draggable:true,
+                            animation: google.maps.Animation.DROP,
+                            position: results[0].geometry.location
+                        });
+
+                    markers.push(marker);
+
+
+                    google.maps.event.addListener(marker, 'dragend', function()
+                    {
+                        var marker_positions = marker.getPosition();
+                        $('#latitude').val(marker_positions.lat());
+                        $('#longitude').val(marker_positions.lng());
+//                        console.log(marker.getPosition());
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+
+        }
+        else{
+            alert('You must enter at least country and city');
+        }
+
+    }
+
+    function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 

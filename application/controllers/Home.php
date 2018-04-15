@@ -195,6 +195,9 @@ class Home extends CI_Controller {
                 $location['country'] = $this->input->post('country');
                 $location['state'] = $this->input->post('state');
                 $location['zipcode'] = $this->input->post('zipcode');
+                $location['address'] = $this->input->post('address');
+                $location['latitude'] = $this->input->post('latitude');
+                $location['longitude'] = $this->input->post('longitude');
 
 
 
