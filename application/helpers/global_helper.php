@@ -661,7 +661,7 @@ if ( ! function_exists('get_all_locations_by_type'))
         $CI = get_instance();
         $CI->load->database();
         $CI->db->order_by('name', 'asc');
-        $query = $CI->db->get_where('locations',array('type'=>$type,'status'=>1));
+        $query = $CI->db->get_where('countries',array('id'>=1));
         return $query;
     }
 }

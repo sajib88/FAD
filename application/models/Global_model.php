@@ -849,7 +849,7 @@ class Global_model extends CI_Model {
     function get_all_locations_by_parent($parent='')
     {
         $this->db->order_by('name','asc');
-        $query = $this->db->get_where('locations',array('parent'=>$parent,'status'=>1));        
+        $query = $this->db->get_where('states',array('country_id'=>$parent));        
         return $query;
     }
 

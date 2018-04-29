@@ -49,10 +49,15 @@ class Profile extends CI_Controller {
                 $save['npi'] = $this->input->post('npi');
                 $save['pln'] = $this->input->post('pln');
                 $save['gender'] = $this->input->post('gender');
-                $save['country'] = $this->input->post('country');
-                $save['state'] = $this->input->post('state');
-                $save['city'] = $this->input->post('city');
+                $UserZipCodeData['country'] = $this->input->post('country');
+                $UserZipCodeData['state'] = $this->input->post('state');
+                
+                $UserZipCodeData['address'] = $this->input->post('address');
+                $UserZipCodeData['latitude'] = $this->input->post('latitude');
+                $UserZipCodeData['longitude'] = $this->input->post('longitude');
+                $UserZipCodeData['zipcode'] = $this->input->post('zipcode');
                 $save['phone'] = $this->input->post('phone');
+                $save['city'] = $this->input->post('city');
                 $save['university_clg'] = $this->input->post('university_clg');
 
                 if (isset($_FILES["profilepicture"]["name"]) && $_FILES["profilepicture"]["name"] != '') {
@@ -68,6 +73,7 @@ class Profile extends CI_Controller {
                 }
 
                 if ($this->global_model->update('users', $save, array('id' => $loginId))) {
+                    $this->global_model->update('user_zipcode', $UserZipCodeData, array('userid' => $loginId));
                     $this->session->set_flashdata('message', 'Update Success');
                     redirect(base_url('profile/update'));
                 }
@@ -77,11 +83,14 @@ class Profile extends CI_Controller {
         }
 
         $data['user_info'] = $this->global_model->get_data('users', array('id' => $loginId));
-        $countryInfo = $this->global_model->get_data('countries', array('id' => $data['user_info']['country']));
-        $data['states'] = $this->global_model->get('states', array('country_id' => $countryInfo['id']));
-        $data['user_info'] = $this->global_model->get_data('users', array('id' => $loginId));
-        $data['countries'] = $this->global_model->get('countries');
+        $data['countryInfo'] = $this->global_model->get_data('user_zipcode', array('userid' => $loginId));
+        //$data['states'] = $this->global_model->get('states', array('country_id' => $countryInfo['id']));
+        //$data['countries'] = $this->global_model->get('countries');
         $data['profession'] = $this->global_model->get('profession');
+
+        //print '<pre>';
+        //print_r($data);exit();
+
         $this->load->view('header', $data);
         $this->load->view('profile/index', $data);
         $this->load->view('footer');

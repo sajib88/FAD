@@ -160,38 +160,64 @@
                                 <!-- form start -->
                                 <div class="form-group">
                                     <label>Country</label>
-                                    <select onchange="getComboA(this)" name="country" class="form-control">
-                                        <?php
-                                        if (is_array($countries)) {
-                                            foreach ($countries as $country) {
-                                                ?>
-                                                <option <?php if ($country->id == $user_info['country']) echo 'selected'; ?> value="<?php echo $country->id; ?>"><?php echo $country->name; ?></option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
+                                    <select name="country" id="country" class="form-control">
+                                     <option data-name="" value=""><?php echo 'select country';?></option>
+                                     <?php $v = (set_value('country')!='')?set_value('country'):$countryInfo['country'];?>
+
+                                     <?php foreach (get_all_locations_by_type('country')->result() as $row) {
+                                            $sel = ($row->id==$v)?'selected="selected"':'';
+                                            ?>
+                                            <option data-name="<?php echo $row->name;?>" value="<?php echo $row->id;?>" <?php echo $sel;?>><?php echo $row->name;?></option>
+                                        <?php }?>
                                     </select>
                                 </div>
                                 <div id="result">
                                     <div class="form-group">
                                         <label>State</label>
-                                        <select name="state" class="form-control">
-                                            <?php
-                                            if (is_array($states)) {
-                                                foreach ($states as $row) {
-                                                    ?>
-                                                    <option <?php if ($row->name == $user_info['state']) echo 'selected'; ?> value="<?php echo $row->name ?>"><?php echo $row->name ?> </option>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                        <select name="state" id="state" class="form-control">
+                                        
                                         </select>
+                                    <?php echo form_error('state');?>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>City</label>
                                     <input name="city" value="<?php echo!empty($user_info['city']) ? $user_info['city'] : ''; ?>"  class="form-control">
                                 </div>
+
+                                <div class="form-group">
+                                 <label>Zipcode</label>
+                                    <?php $v = (set_value('zipcode')!='')?set_value('zipcode'):$countryInfo['zipcode'];?>
+                                    <input  required type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Zip Code" value="<?php echo $v;?>">
+                                </div>
+
+                                <div class="form-group">
+                                <label>Address</label>
+                                    <?php $v = (set_value('address')!='')?set_value('address'):$countryInfo['address'];?>
+                                    <input id="address" type="text" name="address" placeholder="<?php echo 'address';?>" value="<?php echo $v;?>" class="form-control">
+                                    <?php echo form_error('address');?>
+                                </div>
+
+                                <div class="form-group">
+                                <a href="javascript:void(0)" class="btn btn-danger" onclick="codeAddress()"><i class="fa fa-map-marker"></i> <?php echo 'view on map';?></a>
+                                </div>
+
+                                <div class="form-group mb-10">
+                                    <div id="form-map"></div>
+                                </div>
+
+                                <div class="form-group">
+                                <label>Latitude</label>
+                                    <?php $v = (set_value('latitude')!='')?set_value('latitude'):$countryInfo['latitude'];?>
+                                    <input id="latitude" type="text" name="latitude" placeholder="<?php echo 'latitude';?>" value="<?php echo $v;?>" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                 <label>Longitude</label>
+                                     <?php $v = (set_value('longitude')!='')?set_value('longitude'):$countryInfo['longitude'];?>
+                                        <input id="longitude" type="text" name="longitude" placeholder="<?php 'longitude';?>" value="<?php echo $v;?>" class="form-control">
+                                </div>
+
                             </div>
                         </div>
                         <!-- /.box -->
@@ -264,6 +290,14 @@
         </section>
     </div>
 </div>
+<style>
+    #form-map{
+        background-color: #e5e3df;
+        height: 200px;
+        width: 100%;
+    }
+    #form-map img { max-width: none; }
+</style>
 
 
 <script type="text/javascript">
@@ -285,21 +319,177 @@
         });
     });
 </script>
-<script>
-    function getComboA(sel) {
-        var value = sel.value;
-        var base_url = '<?php echo base_url() ?>';
-        var da = {state: value};
-        $.ajax({
-            type: 'POST',
-            url: base_url + "public_web/publicweb/getStateByAjax",
-            data: da,
-            dataType: "text",
-            success: function(resultData) {
-                $("#result").html(resultData);
+
+
+
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/markercluster.min.js"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/map-icons.min.js"></script>
+<script src="<?php echo base_url(); ?>script-assets/js/map_config.js"></script>
+
+<script src="<?php echo base_url(); ?>script-assets/js/jquery.form.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    var val = jQuery('#country').val();
+    var loadUrl = '<?php echo base_url() ?>'+'home/get_state_by_country_ajax/'+val;
+    jQuery.post(
+        loadUrl,
+        {},
+        function(responseText){
+            jQuery('#state').html(responseText);
+            var sel_country = '<?php echo (set_value("country")!='')?set_value("country"):$countryInfo['country'];?>';
+            var sel_state   = '<?php echo (set_value("state")!='')?set_value("state"):$countryInfo['state'];?>';
+            if(val==sel_country)
+                jQuery('#state').val(sel_state);
+            else
+                jQuery('#state').val('');
+            jQuery('#state').focus();
+            jQuery('#state').trigger('change');
+        }
+    );
+    
+
+     $('#country').on('change',function(){
+        // jQuery('#city').val('');
+        // jQuery('#selected_city').val('');
+        var val = $(this).val();
+       
+        
+        var loadUrl = '<?php echo base_url() ?>'+'home/get_state_by_country_ajax/'+val;
+
+        jQuery.post(
+            loadUrl,
+            {},
+            function(responseText){
+                jQuery('#state').html(responseText);
+                var sel_country = '<?php echo (set_value("country")!='')?set_value("country"):$countryInfo['country'];?>';
+                var sel_state   = '<?php echo (set_value("state")!='')?set_value("state"):$countryInfo['state'];?>';
+                if(val==sel_country)
+                    jQuery('#state').val(sel_state);
+                else
+                jQuery('#state').val('');
+                jQuery('#state').focus();
+                jQuery('#state').trigger('change');
+
             }
-        });
+        );
+     }).change();
+});
+
+</script>
+
+<script type="text/javascript">
+    var markers = [];
+    //    var map;
+    var Ireland = "Dhaka, Bangladesh";
+    function initialize() {
+        
+        geocoder = new google.maps.Geocoder();
+        var mapOptions = {
+            center: new google.maps.LatLng(-34.397, 150.644),
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: MAP_STYLE
+        };
+        map = new google.maps.Map(document.getElementById("form-map"),
+            mapOptions);
+//        codeAddress();//call the function
+        var ex_latitude = $('#latitude').val();
+        var ex_longitude = $('#longitude').val();
+
+        if (ex_latitude != '' && ex_longitude != ''){
+            map.setCenter(new google.maps.LatLng(ex_latitude, ex_longitude));//center the map over the result
+            var marker = new google.maps.Marker(
+                {
+                    map: map,
+                    draggable:true,
+                    animation: google.maps.Animation.DROP,
+                    position: new google.maps.LatLng(ex_latitude, ex_longitude)
+                });
+
+            markers.push(marker);
+            google.maps.event.addListener(marker, 'dragend', function()
+            {
+                var marker_positions = marker.getPosition();
+                $('#latitude').val(marker_positions.lat());
+                $('#longitude').val(marker_positions.lng());
+//                        console.log(marker.getPosition());
+            });
+
+        }
 
     }
 
+    function codeAddress()
+    {
+        
+        var main_address = $('#address').val();
+        var country = $('#country').find(':selected').data('name');
+        var state = $('#state').find(':selected').data('name');
+
+        var zipcode = $('#zipcode').val();
+      
+
+        var address = [state, country,zipcode].join();
+
+        console.log(address);
+
+        if(country != '' && state != '')
+        {
+
+
+            setAllMap(null); //Clears the existing marker
+
+            geocoder.geocode( {address:address}, function(results, status)
+            {
+                if (status == google.maps.GeocoderStatus.OK)
+                {
+//                    console.log(results[0].geometry.location.lat());
+                    $('#latitude').val(results[0].geometry.location.lat());
+                    $('#longitude').val(results[0].geometry.location.lng());
+                    map.setCenter(results[0].geometry.location);//center the map over the result
+
+
+                    //place a marker at the location
+                    var marker = new google.maps.Marker(
+                        {
+                            map: map,
+                            draggable:true,
+                            animation: google.maps.Animation.DROP,
+                            position: results[0].geometry.location
+                        });
+
+                    markers.push(marker);
+
+
+                    google.maps.event.addListener(marker, 'dragend', function()
+                    {
+                        var marker_positions = marker.getPosition();
+                        $('#latitude').val(marker_positions.lat());
+                        $('#longitude').val(marker_positions.lng());
+//                        console.log(marker.getPosition());
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+
+        }
+        else{
+            alert('You must enter at least country and city');
+        }
+
+    }
+
+    function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
 </script>
