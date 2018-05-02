@@ -666,5 +666,17 @@ if ( ! function_exists('get_all_locations_by_type'))
     }
 }
 
+if ( ! function_exists('get_all_locations_by_type'))
+{
+    function get_all_locations_by_type($type='state')
+    {
+        $CI = get_instance();
+        $CI->load->database();
+        $CI->db->order_by('name', 'asc');
+        $query = $CI->db->get_where('states',array('id'>=1));
+        return $query;
+    }
+}
+
 
 ?>

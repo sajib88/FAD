@@ -853,6 +853,11 @@ class Global_model extends CI_Model {
         return $query;
     }
 
+    public function insert_search_user_info($table, $data) {
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+
 
 
 

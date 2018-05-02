@@ -12,6 +12,7 @@
     </div>
 </header>
 
+
 <!--BG with 4 box -->
 <header class="business-header">
     <div class="container">
@@ -296,6 +297,194 @@
     <div class="ptop-40"></div>
 </section>
 
+
+<div style="display: none;" class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Find Your Doctors</h4>
+      </div>
+      <div class="modal-body">
+                <form method="post">
+                        <label>Country</label>
+                        <select required="required" name="country" id="jscountry" class="form-control">
+                         <option data-name="" value=""><?php echo 'select country';?></option>
+                         <?php $v = (set_value('country')!='')?set_value('country'):'';?>
+
+                         <?php foreach (get_all_locations_by_type('country')->result() as $row) {
+                                $sel = ($row->id==$v)?'selected="selected"':'';
+                                ?>
+                                <option data-name="<?php echo $row->name;?>" value="<?php echo $row->id;?>" <?php echo $sel;?>><?php echo $row->name;?></option>
+                            <?php }?>
+                        </select>
+
+                        <label>State</label>
+                        <select required="required" name="jsstate" id="jsstate" class="form-control">
+                         <option data-name="" value=""><?php echo 'select state';?></option>
+                         <?php $v = (set_value('country')!='')?set_value('country'):'';?>
+
+                         <?php foreach (get_all_locations_by_type('country')->result() as $row) {
+                                $sel = ($row->id==$v)?'selected="selected"':'';
+                                ?>
+                                <option data-name="<?php echo $row->name;?>" value="<?php echo $row->id;?>" <?php echo $sel;?>><?php echo $row->name;?></option>
+                            <?php }?>
+                        </select>
+                        <label>Zip code</label>
+                        <input required="required" class="form-control" type="text" name="zipcode" id="zipcode"  placeholder="zipcode">
+                        <label>Email</label>
+                        <input required="required" class="form-control" type="email" name="email" id="email"  placeholder="email">
+
+                        
+                </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-prev">Prev</button>
+        <button type="button" class="btn btn-info btn-next">Next</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: none;" class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Information</h4>
+      </div>
+      <div class="modal-body">
+       <p style="font-size: 20px;font-weight: bold;"> I have pain or discomfort when I: Stand still (i.e., to cook, wash dishes, wait in line) </p>
+       <label class="radiocontainer">I can do this,but it causes me pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="radiocontainer">This activity is limited due to pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="radiocontainer">I am unable to do this due to pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+   
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-prev">Prev</button>
+        <button type="button" class="btn btn-info btn-next">Next</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: none;" class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Information</h4>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 20px;font-weight: bold;"> I have pain or discomfort when I: walk (i.e., to walk, Walk up stairs , Walk down stairs) </p>
+       <label class="radiocontainer">I can do this,but it causes me pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="radiocontainer">This activity is limited due to pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="radiocontainer">I am unable to do this due to pain 
+          <input type="radio"  name="radio">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-prev">Prev</button>
+        <button type="button" class="btn btn-info btn-next">Next</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content" style="background: #fff;">
+
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <div class="card hovercard">
+                   <img src="<?php echo base_url('assets/file/'.'slider-1.jpg');?>" alt=""/>
+                   <div class="avatar">
+                      <img src="<?php echo base_url('assets/file/'.'setone.jpg');?>" alt="" />
+                   </div>
+                   <div class="info">
+                      <div class="title">
+                         Chiropractor
+                      </div>
+                      <div class="desc">Find Your Doctors</div>
+                   </div>
+                   <div class="bottom">
+                      <button class="btn btn-info" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#myModal1">Search</button>
+                   </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card hovercard">
+                   <img src="<?php echo base_url('assets/file/'.'1491119649.jpeg');?>" alt=""/>
+                   <div class="avatar">
+                      <img src="<?php echo base_url('assets/file/'.'1491119649.jpeg');?>" alt="" />
+                   </div>
+                   <div class="info">
+                      <div class="title">
+                         The Title
+                      </div>
+                      <div class="desc">Lorem ipsum</div>
+                      <div class="desc">Lorem ipsum</div>
+                      <div class="desc">Lorem ipsum</div>
+                   </div>
+                   <div class="bottom">
+                      <button class="btn btn-default">Button</button>
+                   </div>
+                   </div>
+             </div>      
+
+                <div class="col-md-4">
+                <div class="card hovercard">
+                   <img src="<?php echo base_url('assets/file/'.'1491119649.jpeg');?>" alt=""/>
+                   <div class="avatar">
+                      <img src="<?php echo base_url('assets/file/'.'1491119649.jpg');?>" alt="" />
+                   </div>
+                   <div class="info">
+                      <div class="title">
+                         The Title
+                      </div>
+                      <div class="desc">Lorem ipsum</div>
+                      <div class="desc">Lorem ipsum</div>
+                      <div class="desc">Lorem ipsum</div>
+                   </div>
+                   <div class="bottom">
+                      <button class="btn btn-default">Button</button>
+                   </div>
+                   </div>
+                </div>
+        </div>
+
+            
+        </div>
+  </div>
+
+</section>
+
 <section id="news">
     <div class="jumbotron">
 
@@ -346,3 +535,230 @@
 
 
 </main>
+
+<style>
+    .card {
+  padding-top: 20px;
+  margin: 10px 0 20px 0;
+  background-color: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-top-width: 0;
+  border-bottom-width: 2px;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+
+.card.hovercard {
+  position: relative;
+  width: 300px;
+  padding-top: 0;
+  overflow: hidden;
+  text-align: center;
+  background-color: #fff;
+}
+
+.card.hovercard img {
+  width: 300px;
+  height: 200px;
+}
+
+.card.hovercard .avatar {
+  position: relative;
+  top: -40px;
+  margin-bottom: -40px;
+}
+
+.card.hovercard .avatar img {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid gray;
+
+}
+
+.card.hovercard .info {
+  padding: 4px 8px 10px;
+}
+
+.card.hovercard .info .title {
+  margin-bottom: 4px;
+  font-size: 24px;
+  line-height: 1;
+  color: #262626;
+  vertical-align: middle;
+}
+
+.card.hovercard .info .desc {
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  color: #737373;
+  text-overflow: ellipsis;
+}
+
+.card.hovercard .bottom {
+  padding: 0 20px;
+  margin-bottom: 17px;
+}
+
+.card.people .card-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  padding: 10px 20px;
+  line-height: 29px;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* The container */
+.radiocontainer {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radiocontainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radiocontainer:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radiocontainer input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radiocontainer input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radiocontainer .checkmark:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+</style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+   // body...
+   //if(document.cookie.indexOf('visited=true') == -1){
+         //$("#myModal1").modal({backdrop: 'static', keyboard: false});
+         var flag = 0;
+         $("div[id^='myModal']").each(function(){
+        
+         var currentModal = $(this);
+
+            //alert(currentModal);
+           //click next
+           currentModal.find('.btn-next').click(function(){
+             var country = $('#jscountry').val();
+             var state = $('#jsstate').val();
+             var zipcode = $('#zipcode').val();
+             var email = $('#email').val();
+             var objArr = {};
+              
+
+             if(country != '' && state != '' && zipcode != '' && email !=''){
+              
+              if(flag == 0){
+              var searchArr = [];
+              objArr.country = country;
+              objArr.state = state;
+              objArr.zipcode = zipcode;
+              objArr.email = email;
+              searchArr.push(objArr);
+
+              // $.ajax({
+              //     type: 'POST',
+              //     url: '<?php echo base_url('home/addSearchUser'); ?>',
+              //     data:  {data : JSON.stringify(searchArr)},
+              //     contentType: 'application/json; charset=utf-8',
+              //     datatype: 'json',
+              //     success: function (result) {
+              //         alert('Success ' + result.id);
+              //         flag = 1;
+              //     },
+              //     error: function (result) {
+              //         alert('Fail ' + result.d);
+              //     }
+              // });
+            }
+
+               currentModal.modal('hide');
+               currentModal.closest("div[id^='myModal']").nextAll("div[id^='myModal']").first().modal({backdrop: 'static', keyboard: false}); 
+              }
+              else{
+                alert("Please Fill All fields Properly");
+              }
+           });
+           
+           //click prev
+           currentModal.find('.btn-prev').click(function(){
+             currentModal.modal('hide');
+             currentModal.closest("div[id^='myModal']").prevAll("div[id^='myModal']").first().modal({backdrop: 'static', keyboard: false}); 
+           });
+
+         });
+
+         //var year = 1000*60*60*24*365;
+         //var expires = new Date((new Date()).valueOf() + year);
+
+         //document.cookie = "visited=true;expires=" + expires.toUTCString();
+      //}
+
+});
+   
+</script>

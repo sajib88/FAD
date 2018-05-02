@@ -729,6 +729,33 @@ class Home extends CI_Controller {
         die;
     }
 
+    public function addSearchUser()
+    {
+
+        var_dump($_POST);die;
+        // print '<pre>';
+        // print_r($data);
+        // exit();
+        // if(count($data) > 0){
+        //     $data = json_decode($_POST);
+
+        //     print '<pre>';
+        //     print_r($data);
+        //     exit();
+            
+            // $newData['country'] = $data[0]['country'];
+            // $newData['state'] = $data[0]['state'];
+            // $newData['zipcode'] = $data[0]['zipcode'];
+            // $newData['email'] = $data[0]['email'];
+
+        
+            // $id = $this->global_model->insert_search_user_info('user_search_info',$newData);
+            echo  $id;
+                    
+        //} 
+        
+    }
+
 
 
 
