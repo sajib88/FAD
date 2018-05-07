@@ -732,27 +732,21 @@ class Home extends CI_Controller {
     public function addSearchUser()
     {
 
-        var_dump($_POST);die;
-        // print '<pre>';
-        // print_r($data);
-        // exit();
-        // if(count($data) > 0){
-        //     $data = json_decode($_POST);
+            $data['country']  = $this->input->post('country');
+            $data['state']    = $this->input->post('state');
+            $data['email']    = $this->input->post('email');
+            $data['zipcode']  = $this->input->post('zipcode');
 
-        //     print '<pre>';
-        //     print_r($data);
-        //     exit();
-            
-            // $newData['country'] = $data[0]['country'];
-            // $newData['state'] = $data[0]['state'];
-            // $newData['zipcode'] = $data[0]['zipcode'];
-            // $newData['email'] = $data[0]['email'];
-
-        
-            // $id = $this->global_model->insert_search_user_info('user_search_info',$newData);
-            echo  $id;
-                    
-        //} 
+            if($this->input->post('email') != null){
+                $isemail =  $this->global_model->emilIsExist('user_search_info',$this->input->post('email'));
+                if($isemail == true){
+                    echo 'data already exist';
+                }
+                else{
+                    $id = $this->global_model->insert('user_search_info',$data);
+                    echo  $id;
+                }
+            } 
         
     }
 

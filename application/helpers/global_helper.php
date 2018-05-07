@@ -679,4 +679,39 @@ if ( ! function_exists('get_all_locations_by_type'))
 }
 
 
+if ( ! function_exists('get_all_Question'))
+{
+    function get_all_Question($ProfessionId='')
+    {
+        $CI = get_instance();
+        $CI->load->database();
+        $query = $CI->db->get_where('tblquestion',array('ProfessionId'=>$ProfessionId));
+        return $query;
+    }
+}
+
+if ( ! function_exists('get_all_Answer'))
+{
+    function get_all_Answer($QusetionId='')
+    {
+        $CI = get_instance();
+        $CI->load->database();
+        $query = $CI->db->get_where('tblanswer',array('QuestionId'=>$QusetionId));
+        return $query;
+    }
+}
+
+if ( ! function_exists('get_all_Profession'))
+{
+    function get_all_Profession()
+    {
+        $CI = get_instance();
+        $CI->load->database();
+        $query = $CI->db->get('tblanswer',array('QuestionId'=>$QusetionId));
+        return $query;
+    }
+}
+
+
+
 ?>

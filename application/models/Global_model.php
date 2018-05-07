@@ -858,6 +858,21 @@ class Global_model extends CI_Model {
         return $this->db->insert_id();
     }
 
+    public function emilIsExist($table='',$data='')
+    {
+        if($data != null){
+            $this->db->select('*')->from($table);
+            $this->db->where('email', $data);
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    }
+
 
 
 
